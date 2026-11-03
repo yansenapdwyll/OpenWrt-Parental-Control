@@ -4,8 +4,8 @@ pkgver="1.0.0"
 pkgrel=1
 pkgdesc="Advanced Parental Control with Screen Time Quota, DoH Blocking and Quarantine for OpenWrt 25"
 url="https://openwrt.org"
-arch="all"
-license="GPL-3.0"
+arch="noarch"
+license="GPL-3.0-or-later"
 
 depends="
     luci-base
@@ -18,16 +18,13 @@ depends="
     dnsmasq-full
 "
 
+options="!check"
 source=""
-builddir="$srcdir"
-
-build() {
-    return 0
-}
 
 package() {
     mkdir -p "$pkgdir"
-    cp -dpr "$startdir/root/"* "$pkgdir/" 2>/dev/null || true
+    cp -dpr "$startdir/root/"* "$pkgdir/"
+    
     chmod 0755 "$pkgdir"/etc/init.d/parentctrl
     chmod 0755 "$pkgdir"/usr/share/parentctrl/*.uc
 }
