@@ -22,14 +22,11 @@ jobs:
 
           mkdir -p "${WORK_DIR}/control" "${WORK_DIR}/data" "${WORK_DIR}/out"
 
-          # 1. Kopiowanie plików aplikacji do struktury danych
           cp -r package/luci-app-parentctrl/root/* "${WORK_DIR}/data/"
 
-          # Wymuszenie poprawnych uprawnień uniksowych
           chmod 0755 "${WORK_DIR}/data/etc/init.d/parentctrl"
           chmod 0755 "${WORK_DIR}/data/usr/share/parentctrl/"*.uc
 
-          # 2. Generowanie pliku metadanych APK (.PKGINFO)
           cat << 'PKGINFO' > "${WORK_DIR}/control/.PKGINFO"
           pkgname = luci-app-parentctrl
           pkgver = 1.0.0-r1
@@ -41,13 +38,11 @@ jobs:
           arch = all
           license = GPL-3.0-or-later
           depend = luci-base firewall4 ucode ucode-mod-fs ucode-mod-uci ucode-mod-uloop ucode-mod-socket dnsmasq-full
-PKGINFO
+          PKGINFO
 
-          # 3. Tworzenie archiwów składowych APK
           tar --numeric-owner --owner=0 --group=0 -czf "${WORK_DIR}/control.tar.gz" -C "${WORK_DIR}/control" .PKGINFO
           tar --numeric-owner --owner=0 --group=0 -czf "${WORK_DIR}/data.tar.gz" -C "${WORK_DIR}/data" .
 
-          # 4. Łączenie w końcową paczkę .apk
           cat "${WORK_DIR}/control.tar.gz" "${WORK_DIR}/data.tar.gz" > "${WORK_DIR}/out/${PKG_NAME}-${PKG_VER}.apk"
 
       - name: Upload compiled APK artifact
@@ -55,3 +50,4 @@ PKGINFO
         with:
           name: luci-app-parentctrl-apk
           path: /tmp/apk_work/out/*.apk
+
