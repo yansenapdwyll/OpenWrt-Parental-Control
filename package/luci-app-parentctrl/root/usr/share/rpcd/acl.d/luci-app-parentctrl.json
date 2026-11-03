@@ -1,0 +1,18 @@
+{
+  "luci-app-parentctrl": {
+    "description": "Grant access to Parental Control configuration and state",
+    "read": {
+      "uci": [ "parentctrl" ],
+      "file": {
+        "/tmp/parentctrl_state.json": [ "read" ],
+        "/tmp/parentctrl_stats.json": [ "read" ]
+      },
+      "ubus": {
+        "luci-rpc": [ "getDHCPLeases" ]
+      }
+    },
+    "write": {
+      "uci": [ "parentctrl" ]
+    }
+  }
+}

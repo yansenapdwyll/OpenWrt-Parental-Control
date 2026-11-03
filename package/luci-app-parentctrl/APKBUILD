@@ -1,0 +1,33 @@
+# Maintainer: OpenWrt Developer <dev@openwrt.org>
+pkgname="luci-app-parentctrl"
+pkgver="1.0.0"
+pkgrel=1
+pkgdesc="Advanced Parental Control with Screen Time Quota, DoH Blocking and Quarantine for OpenWrt 25"
+url="https://openwrt.org"
+arch="all"
+license="GPL-3.0"
+
+depends="
+    luci-base
+    firewall4
+    ucode
+    ucode-mod-fs
+    ucode-mod-uci
+    ucode-mod-uloop
+    ucode-mod-socket
+    dnsmasq-full
+"
+
+source=""
+builddir="$srcdir"
+
+build() {
+    return 0
+}
+
+package() {
+    mkdir -p "$pkgdir"
+    cp -dpr "$startdir/root/"* "$pkgdir/" 2>/dev/null || true
+    chmod 0755 "$pkgdir"/etc/init.d/parentctrl
+    chmod 0755 "$pkgdir"/usr/share/parentctrl/*.uc
+}

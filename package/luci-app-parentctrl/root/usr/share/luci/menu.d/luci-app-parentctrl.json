@@ -1,0 +1,12 @@
+{
+  "admin/services/parentctrl": {
+    "title": "Kontrola Rodzicielska",
+    "action": {
+      "type": "view",
+      "path": "parentctrl/overview"
+    },
+    "depends": {
+      "acl": [ "luci-app-parentctrl" ]
+    }
+  }
+}

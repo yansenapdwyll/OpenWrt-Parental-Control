@@ -1,0 +1,44 @@
+name: Build OpenWrt 25 APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:edge
+      options: --privileged
+
+    steps:
+      - name: Install build tools
+        run: |
+          apk update
+          apk add alpine-sdk sudo git tar gzip xz
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup build environment and build APK
+        run: |
+          adduser -D builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+          addgroup builder abuild
+          chown -R builder:builder .
+
+          su builder -c "
+            abuild-keygen -a -n
+            cd package/luci-app-parentctrl
+            abuild -F -r
+          "
+
+          mkdir -p /tmp/output
+          find /home/builder/packages/ -name "*.apk" -exec cp {} /tmp/output/ \;
+
+      - name: Upload compiled APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: luci-app-parentctrl-apk
+          path: /tmp/output/*.apk
